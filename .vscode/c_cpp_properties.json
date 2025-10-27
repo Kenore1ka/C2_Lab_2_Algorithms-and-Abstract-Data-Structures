@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "WSL-GCC",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/C++/common/include"
+            ],
+            "defines": [],
+            "compilerPath": "C:\\MinGW\\bin\\gcc.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 
-// Подключаем все ваши структуры данных
 #include "array.h"
 #include "binaryTree.h"
 #include "hashTable.h"
@@ -11,7 +10,7 @@
 #include "dlinkedList.h"
 #include "queue.h"
 #include "stack.h"
-#include "set.h" // <-- ДОБАВЛЕНО
+#include "set.h"
 
 using namespace std;
 
@@ -37,7 +36,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // --- УЛУЧШЕННАЯ ЛОГИКА ВЫБОРА ---
     // Получаем саму команду (слово до первого пробела)
     string command = query.substr(0, query.find(' '));
 
@@ -50,9 +48,9 @@ int main(int argc, char* argv[]) {
         runLLinkedList(argc, argv);
     } else if (command.rfind("Q", 0) == 0) {
         runQueue(argc, argv);
-    } else if (command.rfind("S", 0) == 0 && command.rfind("SET", 0) != 0) { // Начинается на S, но не на SET
+    } else if (command.rfind("S", 0) == 0 && command.rfind("SET", 0) != 0) {
         runStack(argc, argv);
-    } else if (command.rfind("SET", 0) == 0) { // Начинается на SET
+    } else if (command.rfind("SET", 0) == 0) {
         runSet(argc, argv);
     } else if (command.rfind("H", 0) == 0) {
         runHashTable(argc, argv);

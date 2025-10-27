@@ -1,7 +1,10 @@
+// Задание 1 | Вариант 1
+
+
 #include "expressionSolver.h" // Подключаем наш новый заголовочный файл
 
 #include <iostream>
-#include <stdexcept>
+#include <stdexcept>    
 #include <cctype>
 
 // Подключаем стек из директории common. Путь указывается относительно
@@ -34,7 +37,7 @@ long long evaluate(const std::string& expression) {
     Stack ops;
     ops.init();
 
-    for (int i = 0; i < expression.length(); ++i) {
+    for (size_t i = 0; i < expression.length(); ++i) {
         if (expression[i] == ' ') {
             continue;
         }
@@ -98,12 +101,11 @@ long long evaluate(const std::string& expression) {
     return result;
 }
 
+void runExpressionSolver(int argc, char* argv[]) {
+    // Эта функция игнорирует argc и argv, так как работает интерактивно
+    (void)argc; // Подавляем предупреждение о неиспользуемых переменных
+    (void)argv; // Подавляем предупреждение о неиспользуемых переменных
 
-// --- Временная функция main для тестирования этого задания ---
-// Когда вы будете создавать общий интерфейс, эту функцию main нужно будет удалить
-// или переименовать, а основная точка входа будет в другом файле (например, src/main.cpp).
-
-int main() {
     std::string expression;
     std::cout << "Введите арифметическое выражение для вычисления:" << std::endl;
     std::getline(std::cin, expression);
@@ -114,6 +116,4 @@ int main() {
     } catch (const std::exception& e) {
         std::cerr << "Ошибка: " << e.what() << std::endl;
     }
-
-    return 0;
 }

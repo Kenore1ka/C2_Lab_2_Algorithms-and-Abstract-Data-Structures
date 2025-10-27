@@ -27,6 +27,7 @@ public:
     void printPostorder(); // Левый — Правый — Корень
     void printBFS();       // Уровень за уровнем (обход в ширину)
 
+    bool isAVLBalanced() const;
 private:
     // Внутренняя структура для узла дерева
     struct Node {
@@ -49,6 +50,8 @@ private:
     void inorder(Node* node);
     void preorder(Node* node);
     void postorder(Node* node);
+
+    int checkBalanceAndGetHeight(Node* node) const;
 };
 
 // Интерфейс командной строки

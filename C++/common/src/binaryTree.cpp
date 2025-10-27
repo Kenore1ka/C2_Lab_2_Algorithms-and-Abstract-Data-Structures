@@ -295,3 +295,38 @@ void runBinaryTree(int argc, char* argv[]) {
         tree.printBFS();
     }
 }
+
+bool BinaryTree::isAVLBalanced() const {
+    // Если вспомогательная функция вернула -1, дерево не сбалансировано.
+    return checkBalanceAndGetHeight(root) != -1;
+}
+
+int BinaryTree::checkBalanceAndGetHeight(Node* node) const {
+    // Базовый случай: пустое дерево сбалансировано и имеет высоту 0.
+    if (node == nullptr) {
+        return 0;
+    }
+
+    // Рекурсивно проверяем левое поддерево.
+    int leftHeight = checkBalanceAndGetHeight(node->left);
+    // Если левое поддерево уже не сбалансировано, "пробрасываем" ошибку выше.
+    if (leftHeight == -1) {
+        return -1;
+    }
+
+    // Рекурсивно проверяем правое поддерево.
+    int rightHeight = checkBalanceAndGetHeight(node->right);
+    // Если правое поддерево не сбалансировано, "пробрасываем" ошибку.
+    if (rightHeight == -1) {
+        return -1;
+    }
+
+    // Проверяем баланс в текущем узле.
+    if (std::abs(leftHeight - rightHeight) > 1) {
+        // Этот узел не сбалансирован, возвращаем сигнал ошибки.
+        return -1;
+    }
+
+    // Если все в порядке, возвращаем высоту текущего поддерева.
+    return 1 + std::max(leftHeight, rightHeight);
+}
