@@ -1,13 +1,13 @@
+#include <cstring>
 #include <iostream>
 #include <string>
-#include <cstring>
 
 // Подключаем заголовочные файлы всех наших заданий
-#include "expressionSolver.h"
-#include "patternMatcher.h"
 #include "avlChecker.h"
+#include "expressionSolver.h"
 #include "foldingHasher.h"
 #include "lruCache.h"
+#include "patternMatcher.h"
 
 // Объявляем новую функцию-обертку для expressionSolver
 void runExpressionSolver(int argc, char* argv[]);
@@ -19,7 +19,8 @@ void print_help() {
     std::cout << "  1: Вычислитель выражений (интерактивный режим)." << std::endl;
     std::cout << "     Пример: ./lab2_program 1" << std::endl << std::endl;
     std::cout << "  2: Сопоставление с паттерном." << std::endl;
-    std::cout << "     Пример: ./lab2_program 2 --query \"MATCH emails.txt *@*.ru\"" << std::endl << std::endl;
+    std::cout << "     Пример: ./lab2_program 2 --query \"MATCH emails.txt *@*.ru\"" << std::endl
+              << std::endl;
     std::cout << "  3: Проверка АВЛ-сбалансированности (интерактивный режим)." << std::endl;
     std::cout << "     Пример: ./lab2_program 3" << std::endl << std::endl;
     std::cout << "  4: Хеш-функция (метод свертки)." << std::endl;

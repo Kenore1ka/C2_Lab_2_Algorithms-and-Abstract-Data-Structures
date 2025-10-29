@@ -1,17 +1,11 @@
 // Задание 1 | Вариант 1
 
+#include "expressionSolver.h"
 
-#include "expressionSolver.h" // Подключаем наш новый заголовочный файл
-
-#include <iostream>
-#include <stdexcept>    
 #include <cctype>
-
-// Подключаем стек из директории common. Путь указывается относительно
-// настроек компилятора, которые мы зададим позже.
-#include "stack.h" 
-
-// --- Вспомогательные функции ---
+#include <iostream>
+#include <stdexcept>
+#include "stack.h"
 
 int precedence(char op) {
     if (op == '*') return 2;
@@ -21,15 +15,15 @@ int precedence(char op) {
 
 long long applyOp(long long a, long long b, char op) {
     switch (op) {
-        case '+': return a + b;
-        case '-': return a - b;
-        case '*': return a * b;
+        case '+':
+            return a + b;
+        case '-':
+            return a - b;
+        case '*':
+            return a * b;
     }
-    // В реальном коде здесь лучше бросить исключение
     return 0;
 }
-
-// --- Реализация основной функции ---
 
 long long evaluate(const std::string& expression) {
     Stack values;
@@ -54,25 +48,36 @@ long long evaluate(const std::string& expression) {
             i--;
         } else if (expression[i] == ')') {
             while (ops.top != nullptr && ops.top->data != "(") {
-                if (values.top == nullptr || values.top->next == nullptr) throw std::runtime_error("Некорректное выражение: нехватка операндов.");
-                long long val2 = std::stoll(values.top->data); values.pop();
-                long long val1 = std::stoll(values.top->data); values.pop();
-                
-                if (ops.top == nullptr) throw std::runtime_error("Некорректное выражение: несогласованные скобки.");
-                char op = ops.top->data[0]; ops.pop();
+                if (values.top == nullptr || values.top->next == nullptr)
+                    throw std::runtime_error("Некорректное выражение: нехватка операндов.");
+                long long val2 = std::stoll(values.top->data);
+                values.pop();
+                long long val1 = std::stoll(values.top->data);
+                values.pop();
+
+                if (ops.top == nullptr)
+                    throw std::runtime_error("Некорректное выражение: несогласованные скобки.");
+                char op = ops.top->data[0];
+                ops.pop();
 
                 values.push(std::to_string(applyOp(val1, val2, op)));
             }
-            if (ops.top == nullptr) throw std::runtime_error("Некорректное выражение: несогласованные скобки.");
-            ops.pop(); // Удаляем '('
+            if (ops.top == nullptr)
+                throw std::runtime_error("Некорректное выражение: несогласованные скобки.");
+            ops.pop();  // Удаляем (
         } else {
-            while (ops.top != nullptr && ops.top->data != "(" && precedence(ops.top->data[0]) >= precedence(expression[i])) {
-                if (values.top == nullptr || values.top->next == nullptr) throw std::runtime_error("Некорректное выражение: нехватка операндов.");
-                long long val2 = std::stoll(values.top->data); values.pop();
-                long long val1 = std::stoll(values.top->data); values.pop();
-                
-                char op = ops.top->data[0]; ops.pop();
-                
+            while (ops.top != nullptr && ops.top->data != "(" &&
+                   precedence(ops.top->data[0]) >= precedence(expression[i])) {
+                if (values.top == nullptr || values.top->next == nullptr)
+                    throw std::runtime_error("Некорректное выражение: нехватка операндов.");
+                long long val2 = std::stoll(values.top->data);
+                values.pop();
+                long long val1 = std::stoll(values.top->data);
+                values.pop();
+
+                char op = ops.top->data[0];
+                ops.pop();
+
                 values.push(std::to_string(applyOp(val1, val2, op)));
             }
             ops.push(std::string(1, expression[i]));
@@ -80,11 +85,15 @@ long long evaluate(const std::string& expression) {
     }
 
     while (ops.top != nullptr) {
-        if (values.top == nullptr || values.top->next == nullptr) throw std::runtime_error("Некорректное выражение: нехватка операндов.");
-        long long val2 = std::stoll(values.top->data); values.pop();
-        long long val1 = std::stoll(values.top->data); values.pop();
-        
-        char op = ops.top->data[0]; ops.pop();
+        if (values.top == nullptr || values.top->next == nullptr)
+            throw std::runtime_error("Некорректное выражение: нехватка операндов.");
+        long long val2 = std::stoll(values.top->data);
+        values.pop();
+        long long val1 = std::stoll(values.top->data);
+        values.pop();
+
+        char op = ops.top->data[0];
+        ops.pop();
 
         values.push(std::to_string(applyOp(val1, val2, op)));
     }
@@ -94,17 +103,16 @@ long long evaluate(const std::string& expression) {
     }
 
     long long result = std::stoll(values.top->data);
-    
+
     values.destroy();
     ops.destroy();
-    
+
     return result;
 }
 
 void runExpressionSolver(int argc, char* argv[]) {
-    // Эта функция игнорирует argc и argv, так как работает интерактивно
-    (void)argc; // Подавляем предупреждение о неиспользуемых переменных
-    (void)argv; // Подавляем предупреждение о неиспользуемых переменных
+    (void)argc;  // Подавляем предупреждение о неиспользуемых переменных
+    (void)argv;  // Подавляем предупреждение о неиспользуемых переменных
 
     std::string expression;
     std::cout << "Введите арифметическое выражение для вычисления:" << std::endl;

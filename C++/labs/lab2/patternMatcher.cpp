@@ -1,12 +1,13 @@
 // Задание 4 | Вариант 3
 
 #include "patternMatcher.h"
-#include "array.h" 
 
-#include <iostream>
-#include <string>
 #include <cstring>
+#include <iostream>
 #include <sstream>
+#include <string>
+
+#include "array.h"
 
 bool match(const std::string& text, const std::string& pattern) {
     int i = 0, j = 0;
@@ -16,7 +17,8 @@ bool match(const std::string& text, const std::string& pattern) {
 
     while (i < n) {
         if (j < m && (pattern[j] == '?' || pattern[j] == text[i])) {
-            i++; j++;
+            i++;
+            j++;
         } else if (j < m && pattern[j] == '*') {
             star_idx = j;
             match_idx = i;
@@ -37,10 +39,6 @@ bool match(const std::string& text, const std::string& pattern) {
     return j == m;
 }
 
-/**
- * @brief Основная функция. Загружает строки из файла в DynamicArray и 
- *        проверяет каждую на соответствие шаблону.
- */
 void runPatternMatcher(int argc, char* argv[]) {
     std::string query;
 
@@ -57,7 +55,7 @@ void runPatternMatcher(int argc, char* argv[]) {
         std::cerr << "Пример: --query \"MATCH <файл_с_данными> <шаблон>\"" << std::endl;
         return;
     }
-    
+
     std::stringstream ss(query);
     std::string command, dataFileName, pattern;
     ss >> command >> dataFileName >> pattern;
@@ -68,12 +66,10 @@ void runPatternMatcher(int argc, char* argv[]) {
         return;
     }
 
-    // --- ИСПОЛЬЗОВАНИЕ DYNAMICARRAY ---
-
-    // 1. Создаем экземпляр нашего динамического массива
+    // Создаем экземпляр нашего динамического массива
     DynamicArray stringList;
 
-    // 2. Загружаем в него все строки из указанного файла
+    // Загружаем в него все строки из указанного файла
     stringList.loadFromFile(dataFileName);
 
     if (stringList.length() == 0) {
@@ -81,14 +77,15 @@ void runPatternMatcher(int argc, char* argv[]) {
         return;
     }
 
-    std::cout << "Строки из файла \"" << dataFileName << "\", соответствующие шаблону \"" << pattern << "\":" << std::endl;
-    
+    std::cout << "Строки из файла \"" << dataFileName << "\", соответствующие шаблону \"" << pattern
+              << "\":" << std::endl;
+
     bool foundMatches = false;
-    // 3. Проходим по всем элементам массива
+    // Проходим по всем элементам массива
     for (int i = 0; i < stringList.length(); ++i) {
         std::string currentString = stringList.get(i);
-        
-        // 4. Вызываем нашу вспомогательную функцию match для каждой строки
+
+        // Вызываем нашу вспомогательную функцию match для каждой строки
         if (match(currentString, pattern)) {
             std::cout << currentString << std::endl;
             foundMatches = true;

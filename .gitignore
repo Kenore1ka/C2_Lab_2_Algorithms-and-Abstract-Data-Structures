@@ -33,3 +33,4 @@
 *.txt
 
 build/
+.clang-format

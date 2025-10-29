@@ -1,19 +1,12 @@
 // Задание 6 | Вариант 1
 #include "foldingHasher.h"
 
-#include <iostream>
-#include <string>
+#include <algorithm> 
 #include <cstring>
-#include <sstream> // Для удобного парсинга
-#include <algorithm> // для std::min
+#include <iostream>
+#include <sstream> 
+#include <string>
 
-/**
- * @brief Реализует хеш-функцию методом свертки.
- * 
- * @param key Ключ в виде строки, состоящей из цифр.
- * @param chunkSize Размер одной части, на которые разбивается ключ.
- * @return long long Хеш-значение, полученное суммированием частей.
- */
 long long foldingHash(const std::string& key, int chunkSize) {
     long long totalSum = 0;
 
@@ -22,10 +15,9 @@ long long foldingHash(const std::string& key, int chunkSize) {
 
     // Идем по строке с шагом, равным размеру части
     for (size_t i = 0; i < key.length(); i += chunkSize) {
-        
         // Вырезаем очередную часть из строки
         std::string partStr = key.substr(i, chunkSize);
-        
+
         // Конвертируем строку в число. Используем stoll для long long.
         long long partValue = std::stoll(partStr);
 
@@ -46,9 +38,6 @@ long long foldingHash(const std::string& key, int chunkSize) {
     return totalSum;
 }
 
-/**
- * @brief Основная функция для запуска задания из командной строки.
- */
 void runFoldingHasher(int argc, char* argv[]) {
     std::string query;
 
@@ -59,13 +48,13 @@ void runFoldingHasher(int argc, char* argv[]) {
             break;
         }
     }
-    
+
     if (query.empty()) {
         std::cerr << "Ошибка: не найден аргумент --query." << std::endl;
         std::cerr << "Пример использования: --query \"FOLD <число>\"" << std::endl;
         return;
     }
-    
+
     std::stringstream ss(query);
     std::string command, numberKey;
     ss >> command >> numberKey;
@@ -75,9 +64,9 @@ void runFoldingHasher(int argc, char* argv[]) {
         std::cerr << "Пример использования: --query \"FOLD 523456795\"" << std::endl;
         return;
     }
-    
+
     // Проверка, что ключ состоит только из цифр
-    for (char const &c : numberKey) {
+    for (char const& c : numberKey) {
         if (std::isdigit(c) == 0) {
             std::cerr << "Ошибка: ключ должен состоять только из цифр." << std::endl;
             return;
@@ -86,7 +75,7 @@ void runFoldingHasher(int argc, char* argv[]) {
 
     // В примере используется разбиение на части по 3 символа.
     const int chunkSize = 3;
-    
+
     std::cout << "Ввод: " << numberKey << std::endl;
     std::cout << "Вывод: ";
     foldingHash(numberKey, chunkSize);
