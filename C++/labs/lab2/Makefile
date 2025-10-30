@@ -4,7 +4,7 @@ CXX = g++
 CXXFLAGS = -std=c++11 -Wall -Wextra -g
 
 # Имя итоговой программы
-TARGET = lab2_program
+TARGET = lab2
 
 # Директория для скомпилированных файлов
 BUILD_DIR = ../../build/lab2
@@ -29,9 +29,6 @@ COMMON_SOURCES = ../../common/src/stack.cpp \
 LAB_OBJECTS = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(LAB_SOURCES))
 COMMON_OBJECTS = $(patsubst ../../common/src/%.cpp, $(BUILD_DIR)/%.o, $(COMMON_SOURCES))
 OBJECTS = $(LAB_OBJECTS) $(COMMON_OBJECTS)
-
-
-# --- ПРАВИЛА СБОРКИ ---
 
 # Правило по умолчанию: собрать всё
 all: $(BUILD_DIR) $(TARGET)

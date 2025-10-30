@@ -2,14 +2,12 @@
 #include <iostream>
 #include <string>
 
-// Подключаем заголовочные файлы всех наших заданий
 #include "avlChecker.h"
 #include "expressionSolver.h"
 #include "foldingHasher.h"
 #include "lruCache.h"
 #include "patternMatcher.h"
 
-// Объявляем новую функцию-обертку для expressionSolver
 void runExpressionSolver(int argc, char* argv[]);
 
 void print_help() {
@@ -43,9 +41,7 @@ int main(int argc, char* argv[]) {
         print_help();
         return 1;
     }
-
-    // Мы передаем в функции заданий аргументы, НАЧИНАЯ со второго (argv + 1),
-    // чтобы они не видели номер задания, а работали как раньше.
+    
     switch (task_number) {
         case 1:
             runExpressionSolver(argc - 1, argv + 1);
