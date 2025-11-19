@@ -144,6 +144,39 @@ void freeTable() {
     }
 }
 
+void saveSetToFile(const string& fileName) {
+    ofstream file(fileName);
+    if (!file.is_open()) {
+        cerr << "Ошибка: не удалось открыть файл для записи: " << fileName << endl;
+        return;
+    }
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        HashNode* current = hashTable[i];
+        while (current != nullptr) {
+            // Записываем только ключ, так как это множество
+            file << current->key << endl; 
+            current = current->next;
+        }
+    }
+    file.close();
+}
+
+// Загрузка хеш-таблицы из файла в формате множества
+void loadSetFromFile(const string& fileName) {
+    ifstream file(fileName);
+    if (!file.is_open()) {
+        // Если файла нет, это не ошибка, просто множество будет пустым
+        return;
+    }
+    string key;
+    // Читаем по одному слову (элементу) из строки
+    while (file >> key) { 
+        // Вставляем элемент, используя его и как ключ, и как значение
+        insert(key, key); 
+    }
+    file.close();
+}
+
 // Функция для запуска хеш-таблицы с параметрами командной строки
 void runHashTable(int argc, char* argv[]) {
     initTable();

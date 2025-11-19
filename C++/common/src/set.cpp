@@ -1,19 +1,17 @@
 #include "set.h"
-#include "hashTable.h"
+#include "hashTable.h" // Подключаем хеш-таблицу
 #include <cstring>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
 
-
-
 // Функция-обработчик для ВСЕХ команд, связанных с множеством
 void runSet(int argc, char* argv[]) {
     std::string fileName;
     std::string query;
 
-    // Парсим аргументы командной строки для получения --file и --query
+    // Парсим аргументы командной строки
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--file") == 0 && i + 1 < argc) {
             fileName = argv[i + 1];
@@ -29,36 +27,33 @@ void runSet(int argc, char* argv[]) {
         return;
     }
 
-    // Разбираем строку запроса на команду и токены (аргументы)
     std::stringstream ss(query);
     std::string command, token1, token2;
     ss >> command >> token1 >> token2;
 
-    // Инициализируем хеш-таблицу перед любой операцией
-    initTable();
+    initTable(); // Инициализируем хеш-таблицу
 
-    // Единый блок обработки команд
     if (command == "SETADD") {
         if (fileName.empty() || token1.empty()) {
             std::cerr << "Ошибка: для SETADD требуются --file и значение." << std::endl;
         } else {
-            loadFromFile(fileName);
-            insert(token1, token1);  // Для множества ключ и значение одинаковы
-            saveToFile(fileName);
+            loadSetFromFile(fileName); // ИСПОЛЬЗУЕМ НОВУЮ ФУНКЦИЮ
+            insert(token1, token1);
+            saveSetToFile(fileName);   // ИСПОЛЬЗУЕМ НОВУЮ ФУНКЦИЮ
         }
     } else if (command == "SETDEL") {
         if (fileName.empty() || token1.empty()) {
             std::cerr << "Ошибка: для SETDEL требуются --file и значение." << std::endl;
         } else {
-            loadFromFile(fileName);
+            loadSetFromFile(fileName); // ИСПОЛЬЗУЕМ НОВУЮ ФУНКЦИЮ
             remove(token1);
-            saveToFile(fileName);
+            saveSetToFile(fileName);   // ИСПОЛЬЗУЕМ НОВУЮ ФУНКЦИЮ
         }
     } else if (command == "SET_AT") {
         if (fileName.empty() || token1.empty()) {
             std::cerr << "Ошибка: для SET_AT требуются --file и значение." << std::endl;
         } else {
-            loadFromFile(fileName);
+            loadSetFromFile(fileName); // ИСПОЛЬЗУЕМ НОВУЮ ФУНКЦИЮ
             if (get(token1) != "Ключ не найден") {
                 std::cout << "true" << std::endl;
             } else {
@@ -69,25 +64,26 @@ void runSet(int argc, char* argv[]) {
         if (token1.empty() || token2.empty()) {
             std::cerr << "Ошибка: для SET_UNION требуются два имени файла в запросе." << std::endl;
         } else {
-            loadFromFile(token1);  // Загружаем первое множество
-            loadFromFile(token2);  // Загружаем второе, дубликаты не добавятся
+            loadSetFromFile(token1); // Загружаем первое множество
+            loadSetFromFile(token2); // Загружаем второе, дубликаты не добавятся
             std::cout << "Объединение множеств (" << token1 << " U " << token2 << "):" << std::endl;
-            printTable();
+            printTable(); // printTable можно оставить, она для отладки выводит и ключ и значение
         }
     } else if (command == "SET_INTERSECTION") {
         if (token1.empty() || token2.empty()) {
             std::cerr << "Ошибка: для SET_INTERSECTION требуются два имени файла в запросе." << std::endl;
         } else {
-            loadFromFile(token1);  // Загружаем первое множество (A)
+            loadSetFromFile(token1); // Загружаем первое множество (A)
 
             std::ifstream fileB(token2);
             if (!fileB.is_open()) {
                 std::cerr << "Ошибка: не удалось открыть файл " << token2 << std::endl;
             } else {
                 std::cout << "Пересечение множеств (" << token1 << " n " << token2 << "):" << std::endl;
-                std::string key, val;
-                while (fileB >> key >> val) {
-                    if (get(key) != "Ключ не найден") {  // Если элемент из B есть в A
+                std::string key;
+                // Читаем файл второго множества
+                while (fileB >> key) { 
+                    if (get(key) != "Ключ не найден") { // Если элемент из B есть в A
                         std::cout << key << std::endl;
                     }
                 }
@@ -98,15 +94,16 @@ void runSet(int argc, char* argv[]) {
         if (token1.empty() || token2.empty()) {
             std::cerr << "Ошибка: для SET_DIFFERENCE требуются два имени файла в запросе." << std::endl;
         } else {
-            loadFromFile(token1);  // Загружаем первое множество (A)
+            loadSetFromFile(token1); // Загружаем первое множество (A)
 
             std::ifstream fileB(token2);
             if (!fileB.is_open()) {
                 std::cerr << "Ошибка: не удалось открыть файл " << token2 << std::endl;
             } else {
-                std::string key, val;
-                while (fileB >> key >> val) {
-                    remove(key);  // Удаляем из A все элементы, которые есть в B
+                std::string key;
+                // Читаем файл второго множества
+                while (fileB >> key) { 
+                    remove(key); // Удаляем из A все элементы, которые есть в B
                 }
                 fileB.close();
 
@@ -118,6 +115,5 @@ void runSet(int argc, char* argv[]) {
         std::cerr << "Неизвестная команда для множества: " << command << std::endl;
     }
 
-    // Освобождаем память
-    freeTable();
+    freeTable(); // Освобождаем память
 }
